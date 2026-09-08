@@ -1,4 +1,4 @@
-from models.servico import Servico
+from projeto.models.servico import Servico
 import json
 
 class ServicoDAO:
