@@ -34,16 +34,20 @@ class ManterProfissionalUI:
     def inserir():
         clientes = Service.cliente_listar()
         servicos = Service.servico_listar()
+        profissonais = Service.profissional_listar()
         data = st.text_input("Informe a data e horário do serviço", datetime.now().strftime("%d/%m/%Y %H:%M"))
         confirmado = st.checkbox("Confirmado")
         cliente = st.selectbox("Informe o cliente", clientes, index = None)
         servico = st.selectbox("Informe o serviço", servicos, index = None)
+        profissonal = st.selectbox("Informe o profissional", profissonais, index = None)
         if st.button("Inserir"):
             id_cliente = None
             id_servico = None
+            id_profissional = None
             if cliente != None: id_cliente = cliente.get_id()
             if servico != None: id_servico = servico.get_id()
-            Service.horario_inserir(datetime.strptime(data, "%d/%m/%Y %H:%M"), confirmado, id_cliente, id_servico)
+            if profissonal != None: id_profissional = profissonal.get_id()
+            Service.horario_inserir(datetime.strptime(data, "%d/%m/%Y %H:%M"), confirmado, id_cliente, id_servico, id_profissional)
             st.success("Horário inserido com sucesso")
             time.sleep(2)
             st.rerun()
@@ -54,19 +58,24 @@ class ManterProfissionalUI:
         else:
             clientes = Service.cliente_listar()
             servicos = Service.servico_listar()
+            profissionais = Service.profissional_listar()
             op = st.selectbox("Atualização de Horários", horarios)
             data = st.text_input("Informe a nova data e horário do serviço", op.get_data().strftime("%d/%m/%Y %H:%M"))
             confirmado = st.checkbox("Nova confirmação", op.get_confirmado())
             id_cliente = None if op.get_id_cliente() in [0, None] else op.get_id_cliente()
             id_servico = None if op.get_id_servico() in [0, None] else op.get_id_servico()
+            id_profissional = None if op.get_id_profissional() in [0, None] else op.get_id_profissional()
             cliente = st.selectbox("Informe o novo cliente", clientes, next((i for i, c in enumerate(clientes) if c.get_id() == id_cliente), None))
             servico = st.selectbox("Informe o novo serviço", servicos, next((i for i, s in enumerate(servicos) if s.get_id() == id_servico), None))
+            profissional = st.selectbox("Informe o novo profissional", profissionais, next((i for i, p in enumerate(profissionais) if p.get_id() == id_profissional), None))
             if st.button("Atualizar"):
                 id_cliente = None
                 id_servico = None
+                id_profissional = None
                 if cliente != None: id_cliente = cliente.get_id()
                 if servico != None: id_servico = servico.get_id()
-                Service.horario_atualizar(op.get_id(), datetime.strptime(data, "%d/%m/%Y %H:%M"), confirmado, id_cliente, id_servico)
+                if profissional != None: id_profissional = profissional.get_id()
+                Service.horario_atualizar(op.get_id(), datetime.strptime(data, "%d/%m/%Y %H:%M"), confirmado, id_cliente, id_servico, id_profissional)
                 st.success("Horário atualizado com sucesso")
                 time.sleep(2)
                 st.rerun()
