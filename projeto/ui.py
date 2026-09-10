@@ -1,4 +1,4 @@
-from service import Service
+from projeto.q4_service import Service
 
 class UI:
     @staticmethod

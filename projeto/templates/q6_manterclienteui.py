@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import time
-from service import Service
+from projeto.q4_service import Service
 
 class ManterClienteUI:
     def main():
@@ -19,12 +19,16 @@ class ManterClienteUI:
             for obj in clientes: list_dic.append(obj.to_json())
             df = pd.DataFrame(list_dic)
             st.dataframe(df)
+            Service.convenio_listar()
+
     def inserir():
         nome = st.text_input("Informe o nome")
         email = st.text_input("Informe o e-mail")
         fone = st.text_input("Informe o fone")
+        id_conv = st.text_input("Informe o id de convenio")
         if st.button("Inserir"):
-            Service.cliente_inserir(nome, email, fone)
+            Service.convenio_listar()
+            Service.cliente_inserir(nome, email, fone, id_conv)
             st.success("Cliente inserido com sucesso")
             time.sleep(2)
             st.rerun()
@@ -32,17 +36,20 @@ class ManterClienteUI:
         clientes = Service.cliente_listar()
         if len(clientes) == 0: st.write("Nenhum cliente cadastrado")
         else:
+            Service.convenio_listar()
             op = st.selectbox("Atualização de Clientes", clientes)
             nome = st.text_input("Novo nome", op.get_nome())
             email = st.text_input("Novo e-mail", op.get_email())
             fone = st.text_input("Novo fone", op.get_fone())
+            id_convenio = st.text_input("Novo id de convenio", op.get_id_convenio())
             if st.button("Atualizar"):
                 id = op.get_id()
-                Service.cliente_atualizar(id, nome, email, fone)
+                Service.cliente_atualizar(id, nome, email, fone, id_convenio)
                 st.success("Cliente atualizado com sucesso")
                 time.sleep(2)
                 st.rerun()
     def excluir():
+        Service.convenio_listar()
         clientes = Service.cliente_listar()
         if len(clientes) == 0: st.write("Nenhum cliente cadastrado")
         else:

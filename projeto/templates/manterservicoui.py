@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import time
-from service import Service
+from projeto.q4_service import Service
 
 class ManterServicoUI:
     def main():

@@ -1,9 +1,9 @@
-from projeto.models.q2_cliente import Cliente
+from models.q1_convenio import Convenio
 import json
 
-class ClienteDAO:
+class ConvenioDAO:
     def __init__(self):
-        self.__arquivo = "clientes.json"
+        self.__arquivo = "convenios.json"
         self.__objetos = []
         self.__abrir()
 
@@ -45,13 +45,13 @@ class ClienteDAO:
             arquivo.close()
             self.__objetos = []
             for dic in list_dic:
-                obj = Cliente.from_json(dic)
+                obj = Convenio.from_json(dic)
                 self.__objetos.append(obj)
         except FileNotFoundError:
             pass
 
     def __salvar(self):    
         arquivo = open(self.__arquivo, mode = "w")
-        json.dump(self.__objetos, arquivo, default = Cliente.to_json, indent = 2)
+        json.dump(self.__objetos, arquivo, default = Convenio.to_json, indent = 2)
         arquivo.close()
         

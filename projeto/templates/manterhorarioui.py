@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from service import Service
+from projeto.q4_service import Service
 import time
 from datetime import datetime
 

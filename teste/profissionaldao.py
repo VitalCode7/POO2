@@ -1,4 +1,4 @@
-from models.profissional import Profissional
+from teste.profissional import Profissional
 import json
 
 class ProfissionalDAO:
