@@ -1,8 +1,8 @@
 class Convenio:
-    def __init__(self, id, nome, cont, fone):
+    def __init__(self, id, nome, contato, fone):
         self.set_id(id)
         self.set_nome(nome)
-        self.set_contato(cont)
+        self.set_contato(contato)
         self.set_fone(fone)
     
     def set_id(self, id):
@@ -11,16 +11,16 @@ class Convenio:
     def set_nome(self, nome):
         if nome == "": raise ValueError("Nome deve ser informado")
         self.__nome = nome
-    def set_contato(self, cont):
-        if cont == "": raise ValueError("contato deve ser informado")
-        self.__contato = cont
+    def set_contato(self, contato):
+        if contato == "": raise ValueError("Contato deve ser informado")
+        self.__contato = contato
     def set_fone(self, fone):
         if fone == "": raise ValueError("Fone deve ser informado")
         self.__fone = fone
 
     def get_id(self) : return self.__id
     def get_nome(self) : return self.__nome
-    def get_email(self) : return self.__contato
+    def get_contato(self) : return self.__contato
     def get_fone(self) : return self.__fone
 
     def __str__(self):

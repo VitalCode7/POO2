@@ -1,14 +1,13 @@
-from models.cliente import Cliente
+from models.convenio import Convenio
 import json
 
-class ClienteDAO:
+class ConvenioDAO:
     def __init__(self):
-        self.__arquivo = "clientes.json"
+        self.__arquivo = "convenios.json"
         self.__objetos = []
         self.__abrir()
 
     def inserir(self, obj):
-        # gerar um novo id com o maior valor existente mais um
         id = 0
         if len(self.__objetos) > 0:
             for aux in self.__objetos:
@@ -45,13 +44,13 @@ class ClienteDAO:
             arquivo.close()
             self.__objetos = []
             for dic in list_dic:
-                obj = Cliente.from_json(dic)
+                obj = Convenio.from_json(dic)
                 self.__objetos.append(obj)
         except FileNotFoundError:
             pass
 
     def __salvar(self):    
         arquivo = open(self.__arquivo, mode = "w")
-        json.dump(self.__objetos, arquivo, default = Cliente.to_json, indent = 2)
+        json.dump(self.__objetos, arquivo, default = Convenio.to_json, indent = 2)
         arquivo.close()
         

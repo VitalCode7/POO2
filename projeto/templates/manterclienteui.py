@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import time
-from projeto.q4_service import Service
+from service import Service
 
 class ManterClienteUI:
     def main():
@@ -20,15 +20,14 @@ class ManterClienteUI:
             df = pd.DataFrame(list_dic)
             st.dataframe(df)
             Service.convenio_listar()
-
     def inserir():
         nome = st.text_input("Informe o nome")
         email = st.text_input("Informe o e-mail")
         fone = st.text_input("Informe o fone")
-        id_conv = st.text_input("Informe o id de convenio")
+        id_convenio = st.text_input("Informe o id convenio")
         if st.button("Inserir"):
-            Service.convenio_listar()
-            Service.cliente_inserir(nome, email, fone, id_conv)
+            Service.convenio_listar
+            Service.cliente_inserir(nome, email, fone, id_convenio)
             st.success("Cliente inserido com sucesso")
             time.sleep(2)
             st.rerun()
@@ -41,7 +40,7 @@ class ManterClienteUI:
             nome = st.text_input("Novo nome", op.get_nome())
             email = st.text_input("Novo e-mail", op.get_email())
             fone = st.text_input("Novo fone", op.get_fone())
-            id_convenio = st.text_input("Novo id de convenio", op.get_id_convenio())
+            id_convenio = st.text_input("Novo id convenio", op.get_id_convenio())
             if st.button("Atualizar"):
                 id = op.get_id()
                 Service.cliente_atualizar(id, nome, email, fone, id_convenio)

@@ -1,11 +1,11 @@
 import streamlit as st
 import pandas as pd
 import time
-from projeto.q4_service import Service
+from service import Service
 
 class ManterConvenioUI:
     def main():
-        st.header("Cadastro de Clientes")
+        st.header("Cadastro de Convenios")
         tab1, tab2, tab3, tab4 = st.tabs(["Listar", "Inserir", "Atualizar", "Excluir"])
         with tab1: ManterConvenioUI.listar()
         with tab2: ManterConvenioUI.inserir()
@@ -13,7 +13,7 @@ class ManterConvenioUI:
         with tab4: ManterConvenioUI.excluir()
     def listar():
         convenios = Service.convenio_listar()
-        if len(convenios) == 0: st.write("Nenhum convenio cadastrado")
+        if len(convenios) == 0: st.write("Nenhum convênio cadastrado")
         else:
             list_dic = []
             for obj in convenios: list_dic.append(obj.to_json())
@@ -21,35 +21,35 @@ class ManterConvenioUI:
             st.dataframe(df)
     def inserir():
         nome = st.text_input("Informe o nome")
-        email = st.text_input("Informe o e-mail")
+        contato = st.text_input("Informe o contato")
         fone = st.text_input("Informe o fone")
         if st.button("Inserir"):
-            Service.convenio_inserir(nome, email, fone)
-            st.success("Convenio inserido com sucesso")
+            Service.convenio_inserir(nome, contato, fone)
+            st.success("Convênio inserido com sucesso")
             time.sleep(2)
             st.rerun()
     def atualizar():
-        convenios = Service.convenios_listar()
-        if len(convenios) == 0: st.write("Nenhum convenio cadastrado")
+        convenios = Service.convenio_listar()
+        if len(convenios) == 0: st.write("Nenhum convênio cadastrado")
         else:
-            op = st.selectbox("Atualização de Convenios", convenios)
+            op = st.selectbox("Atualização de Convênios", convenios)
             nome = st.text_input("Novo nome", op.get_nome())
-            email = st.text_input("Novo e-mail", op.get_email())
+            contato = st.text_input("Novo contato", op.get_contato())
             fone = st.text_input("Novo fone", op.get_fone())
             if st.button("Atualizar"):
                 id = op.get_id()
-                Service.convenio_atualizar(id, nome, email, fone)
-                st.success("Convenio atualizado com sucesso")
+                Service.convenio_atualizar(id, nome, contato, fone)
+                st.success("Convênio atualizado com sucesso")
                 time.sleep(2)
                 st.rerun()
     def excluir():
         convenios = Service.convenio_listar()
-        if len(convenios) == 0: st.write("Nenhum convenio cadastrado")
+        if len(convenios) == 0: st.write("Nenhum convênio cadastrado")
         else:
-            op = st.selectbox("Exclusão de Convenios", convenios)
+            op = st.selectbox("Exclusão de Convênios", convenios)
             if st.button("Excluir"):
                 id = op.get_id()
                 Service.convenio_excluir(id)
-                st.success("Convenio excluído com sucesso")
+                st.success("Convênio excluído com sucesso")
                 time.sleep(2)
                 st.rerun()
