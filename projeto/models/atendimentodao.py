@@ -52,10 +52,10 @@ class AtendimentoDAO:
         self.salvar()
         break
 
-  def excluir(self, obj):
+  def excluir(self, id):
     self.abrir()
     for x in self.objetos:
-      if x.get_id() == obj.get_id():
+      if x.get_id() == id:
         self.objetos.remove(x)
         self.salvar()
         break

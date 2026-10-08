@@ -6,6 +6,10 @@ from models.horario import Horario
 from models.horariodao import HorarioDAO
 from models.profissional import Profissional
 from models.profissionaldao import ProfissionalDAO
+from models.atendimento import Atendimento
+from models.atendimentodao import AtendimentoDAO
+from models.pagamento import Pagamento
+from models.pagamentodao import PagamentoDAO
 from datetime import datetime, timedelta
 
 class Service:
@@ -144,4 +148,131 @@ class Service:
             and h.get_id_cliente() != None and h.get_id_profissional() == id_profissional:
                 r.append(h)
         r.sort (key = lambda h : h.get_data())
-        return r 
+        return r
+
+    @staticmethod
+    def atendimento_inserir(
+        data,
+        queixa_principal,
+        historico_saude,
+        avaliacao,
+        prescricao,
+        id_horario,
+        servicos=None,
+        id_cliente=None,
+        id_profissional=None,
+    ):
+        obj = Atendimento(
+            0,
+            data,
+            queixa_principal,
+            historico_saude,
+            avaliacao,
+            prescricao,
+            id_horario,
+            servicos,
+            id_cliente,
+            id_profissional,
+        )
+        AtendimentoDAO().inserir(obj)
+
+    @staticmethod
+    def atendimento_listar():
+        atendimentos = AtendimentoDAO().listar()
+        atendimentos.sort(key=lambda obj: obj.get_data())
+        return atendimentos
+
+    @staticmethod
+    def atendimento_listar_id(id):
+        return AtendimentoDAO().listar_id(id)
+
+    @staticmethod
+    def atendimento_listar_profissional(id_profissional):
+        atendimentos = []
+        for obj in Service.atendimento_listar():
+            profissional_id = obj.get_id_profissional()
+            if profissional_id is None and obj.get_id_horario() is not None:
+                horario = Service.horario_listar_id(obj.get_id_horario())
+                if horario is not None:
+                    profissional_id = horario.get_id_profissional()
+            if profissional_id == id_profissional:
+                atendimentos.append(obj)
+        return atendimentos
+
+    @staticmethod
+    def atendimento_listar_cliente(id_cliente):
+        atendimentos = []
+        for obj in Service.atendimento_listar():
+            cliente_id = obj.get_id_cliente()
+            if cliente_id is None and obj.get_id_horario() is not None:
+                horario = Service.horario_listar_id(obj.get_id_horario())
+                if horario is not None:
+                    cliente_id = horario.get_id_cliente()
+            if cliente_id == id_cliente:
+                atendimentos.append(obj)
+        return atendimentos
+
+    @staticmethod
+    def atendimento_pagamento(id_atendimento):
+        return PagamentoDAO().listar_id_atendimento(id_atendimento)
+
+    @staticmethod
+    def atendimento_registrar_pagamento(id_atendimento, id_cliente, forma):
+        atendimento = next(
+            (
+                obj for obj in Service.atendimento_listar_cliente(id_cliente)
+                if obj.get_id() == id_atendimento
+            ),
+            None,
+        )
+        if atendimento is None:
+            raise ValueError("Atendimento não encontrado para este cliente.")
+        if Service.atendimento_pagamento(id_atendimento) is not None:
+            raise ValueError("Este atendimento já foi pago.")
+        valor = atendimento.get_valor_total()
+        if valor <= 0:
+            raise ValueError("O atendimento não possui valor para pagamento.")
+        formas_validas = {"Pix", "Cartão", "Dinheiro"}
+        if forma not in formas_validas:
+            raise ValueError("Selecione uma forma de pagamento válida.")
+
+        pagamento = Pagamento(
+            0, id_atendimento, id_cliente, valor, datetime.now(), forma
+        )
+        PagamentoDAO().inserir(pagamento)
+        return pagamento
+
+    @staticmethod
+    def atendimento_atualizar(
+        id,
+        data,
+        queixa_principal,
+        historico_saude,
+        avaliacao,
+        prescricao,
+        id_horario,
+        servicos=None,
+        id_cliente=None,
+        id_profissional=None,
+    ):
+        if Service.atendimento_pagamento(id) is not None:
+            raise ValueError("Atendimentos pagos não podem ser alterados.")
+        obj = Atendimento(
+            id,
+            data,
+            queixa_principal,
+            historico_saude,
+            avaliacao,
+            prescricao,
+            id_horario,
+            servicos,
+            id_cliente,
+            id_profissional,
+        )
+        AtendimentoDAO().atualizar(obj)
+
+    @staticmethod
+    def atendimento_excluir(id):
+        if Service.atendimento_pagamento(id) is not None:
+            raise ValueError("Atendimentos pagos não podem ser excluídos.")
+        AtendimentoDAO().excluir(id)

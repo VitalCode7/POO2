@@ -12,6 +12,9 @@ class Atendimento:
       avaliacao,
       prescricao,
       id_horario,
+      servicos=None,
+      id_cliente=None,
+      id_profissional=None,
   ):
     self.set_id(id)
     self.set_data(data)
@@ -20,6 +23,9 @@ class Atendimento:
     self.set_avaliacao(avaliacao)
     self.set_prescricao(prescricao)
     self.set_id_horario(id_horario)
+    self.set_servicos(servicos or [])
+    self.set_id_cliente(id_cliente)
+    self.set_id_profissional(id_profissional)
 
   def get_id(self):
     return self.__id
@@ -42,6 +48,18 @@ class Atendimento:
   def get_id_horario(self):
     return self.__id_horario
 
+  def get_servicos(self):
+    return self.__servicos
+
+  def get_id_cliente(self):
+    return self.__id_cliente
+
+  def get_id_profissional(self):
+    return self.__id_profissional
+
+  def get_valor_total(self):
+    return sum(servico["valor"] for servico in self.__servicos)
+
   def set_id(self, id):
     self.__id = id
 
@@ -63,6 +81,15 @@ class Atendimento:
   def set_id_horario(self, id_horario):
     self.__id_horario = id_horario
 
+  def set_servicos(self, servicos):
+    self.__servicos = [dict(servico) for servico in servicos]
+
+  def set_id_cliente(self, id_cliente):
+    self.__id_cliente = id_cliente
+
+  def set_id_profissional(self, id_profissional):
+    self.__id_profissional = id_profissional
+
   def __str__(self):
     return f"{self.__id} - {self.__data.strftime('%d/%m/%Y %H:%M')} - Queixa: {self.__queixa_principal}"
 
@@ -75,6 +102,9 @@ class Atendimento:
         "avaliacao": self.__avaliacao,
         "prescricao": self.__prescricao,
         "id_horario": self.__id_horario,
+        "servicos": self.__servicos,
+        "id_cliente": self.__id_cliente,
+        "id_profissional": self.__id_profissional,
     }
 
   @staticmethod
@@ -86,5 +116,8 @@ class Atendimento:
         dic["historico_saude"],
         dic["avaliacao"],
         dic["prescricao"],
-        dic["id_horario"],
+        dic.get("id_horario"),
+        dic.get("servicos", []),
+        dic.get("id_cliente"),
+        dic.get("id_profissional"),
     )
