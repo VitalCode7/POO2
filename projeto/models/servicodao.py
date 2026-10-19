@@ -17,8 +17,7 @@ class ServicoDAO:
         self.__objetos.append(obj)
         self.__salvar()
 
-    def listar(self):                
-        return self.__objetos
+    def listar(self): return self.__objetos
 
     def listar_id(self, id):
         for obj in self.__objetos:
@@ -54,3 +53,4 @@ class ServicoDAO:
         arquivo = open(self.__arquivo, mode = "w")
         json.dump(self.__objetos, arquivo, default = Servico.to_json, indent = 2)
         arquivo.close()
+        

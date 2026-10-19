@@ -8,9 +8,44 @@
   },
   {
     "id": 2,
-    "nome": "abv",
-    "email": "abv@gmail.com",
-    "fone": "9399",
-    "senha": "vtt"
+    "nome": "Pedro Gabriel Lima dos Santos",
+    "email": "gabriellimadossantosp@gmail.com",
+    "fone": "1234-12343",
+    "senha": "11marco2010"
+  },
+  {
+    "id": 3,
+    "nome": "Pedro Gabriel Lima dos Santos",
+    "email": "gabriellimadossantosp@gmail.com",
+    "fone": "1234-12345",
+    "senha": "pililiu123"
+  },
+  {
+    "id": 5,
+    "nome": "Pedro Gabriel ",
+    "email": "ben10@gmail.com",
+    "fone": "12345-1234",
+    "senha": "zepilintra"
+  },
+  {
+    "id": 4,
+    "nome": "Pedro Gabriel Lima dos Santos",
+    "email": "gabriellimadossantosp@gmail.com",
+    "fone": "12345-6789",
+    "senha": "pililiu67"
+  },
+  {
+    "id": 6,
+    "nome": "Isabele_fofis",
+    "email": "isabeleestudostab@gmail.com",
+    "fone": "849302019283",
+    "senha": "Biduzinho123"
+  },
+  {
+    "id": 7,
+    "nome": "GG",
+    "email": "GG@gmail.com",
+    "fone": "8499633225588",
+    "senha": "123456789987654321"
   }
 ]

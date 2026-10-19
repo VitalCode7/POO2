@@ -1,61 +1,57 @@
-import json
 from models.atendimento import Atendimento
-
+import json
 
 class AtendimentoDAO:
+    def __init__(self):
+        self.__arquivo = "atendimentos.json"
+        self.__objetos = []
+        self.__abrir()
 
-  def __init__(self):
-    self.objetos = []
+    def inserir(self, obj):
+        # gerar um novo id com o maior valor existente mais um
+        id = 0
+        if len(self.__objetos) > 0:
+            for aux in self.__objetos:
+                if aux.get_id() > id: id = aux.get_id()
+        obj.set_id(id + 1)
+        self.__objetos.append(obj)
+        self.__salvar()
 
-  def abrir(self):
-    try:
-      with open("atendimentos.json", "r", encoding="utf-8") as f:
-        dic = json.load(f)
-        self.objetos = [Atendimento.from_json(obj) for obj in dic]
-    except (FileNotFoundError, json.JSONDecodeError):
-      self.objetos = []
+    def listar(self):                
+        return self.__objetos
 
-  def salvar(self):
-    with open("atendimentos.json", "w", encoding="utf-8") as f:
-      json.dump(
-          [obj.to_json() for obj in self.objetos],
-          f,
-          ensure_ascii=False,
-          indent=4,
-      )
+    def listar_id(self, id):
+        for obj in self.__objetos:
+            if obj.get_id() == id: return obj
+        return None
 
-  def inserir(self, obj):
-    self.abrir()
-    id = 1
-    if len(self.objetos) > 0:
-      id = max(x.get_id() for x in self.objetos) + 1
-    obj.set_id(id)
-    self.objetos.append(obj)
-    self.salvar()
+    def atualizar(self, obj):
+        aux = self.listar_id(obj.get_id())
+        if aux != None:
+            self.__objetos.remove(aux)
+            self.__objetos.append(obj)
+            self.__salvar()
 
-  def listar(self):
-    self.abrir()
-    return self.objetos
+    def excluir(self, id):
+        aux = self.listar_id(id)
+        if aux != None:
+            self.__objetos.remove(aux)
+            self.__salvar()
 
-  def listar_id(self, id):
-    self.abrir()
-    for obj in self.objetos:
-      if obj.get_id() == id:
-        return obj
-    return None
+    def __abrir(self):  
+        try:  
+            arquivo = open(self.__arquivo, mode = "r")
+            list_dic = json.load(arquivo)
+            arquivo.close()
+            self.__objetos = []
+            for dic in list_dic:
+                obj = Atendimento.from_json(dic)
+                self.__objetos.append(obj)
+        except FileNotFoundError:
+            pass
 
-  def atualizar(self, obj):
-    self.abrir()
-    for i, x in enumerate(self.objetos):
-      if x.get_id() == obj.get_id():
-        self.objetos[i] = obj
-        self.salvar()
-        break
-
-  def excluir(self, id):
-    self.abrir()
-    for x in self.objetos:
-      if x.get_id() == id:
-        self.objetos.remove(x)
-        self.salvar()
-        break
+    def __salvar(self):    
+        arquivo = open(self.__arquivo, mode = "w")
+        json.dump(self.__objetos, arquivo, default = Atendimento.to_json, indent = 2)
+        arquivo.close()
+        
