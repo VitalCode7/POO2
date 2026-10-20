@@ -34,10 +34,24 @@ class ManterAtendimentoUI:
         historico_saude = st.text_input("Informe o histórico de saúde")
         avaliacao = st.text_input("Informe a avaliação")
         prescricao = st.text_input("Informe a prescrição")
+        
+        # Novos campos exigidos pela Tarefa 11
+        total = st.number_input("Informe o valor total", min_value=0.0, format="%.2f")
+        pago = st.checkbox("Pago?")
+
         horario = st.selectbox("Informe o horário", horarios)
+        
         if st.button("Inserir"):
-            Service.atendimento_inserir(datetime.strptime(data, "%d/%m/%Y %H:%M"), queixa_principal,\
-                                        historico_saude, avaliacao, prescricao, horario.get_id())
+            Service.atendimento_inserir(
+                datetime.strptime(data, "%d/%m/%Y %H:%M"), 
+                queixa_principal,
+                historico_saude, 
+                avaliacao, 
+                prescricao, 
+                horario.get_id(), 
+                total,
+                pago  
+            )
             st.success("Atendimento inserido com sucesso")
             time.sleep(2)
             st.rerun()
@@ -53,12 +67,9 @@ class ManterAtendimentoUI:
             historico_saude = st.text_input("Informe o novo histórico de saúde", op.get_historico_saude())
             avaliacao = st.text_input("Informe a nova avaliação", op.get_avaliacao())
             prescricao = st.text_input("Informe a nova prescrição", op.get_prescricao())
-            horario = st.selectbox("Informe o novo horário", horarios,\
-                                    next((i for i, c in enumerate(horarios) if c.get_id() == op.get_id_horario()), None))
+            horario = st.selectbox("Informe o novo horário", horarios, next((i for i, c in enumerate(horarios) if c.get_id() == op.get_id_horario()), None))
             if st.button("Atualizar"):
-                Service.atendimento_atualizar(op.get_id(), datetime.strptime(data, "%d/%m/%Y %H:%M"),\
-                                             queixa_principal, historico_saude, avaliacao, prescricao,\
-                                             horario.get_id())
+                Service.atendimento_atualizar(op.get_id(), datetime.strptime(data, "%d/%m/%Y %H:%M"), queixa_principal, historico_saude, avaliacao, prescricao, horario.get_id())
                 st.success("Atendimento atualizado com sucesso")
                 time.sleep(2)
                 st.rerun()

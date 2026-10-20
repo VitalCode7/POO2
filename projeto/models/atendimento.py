@@ -45,9 +45,15 @@ class Atendimento:
 
     @staticmethod
     def from_json(dic):
-        atendimento = Atendimento(dic["id"], datetime.strptime(dic["data"], "%d/%m/%Y %H:%M"), dic["queixa_principal"],\
-                           dic["historico_saude"], dic["avaliacao"], dic["prescricao"])
-        atendimento.set_id_horario(dic["id_horario"])
-        atendimento.set_total(dic["total"])
-        atendimento.set_pago(dic["pago"])
+        atendimento = Atendimento(
+            dic["id"], 
+            datetime.strptime(dic["data"], "%d/%m/%Y %H:%M"), 
+            dic["queixa_principal"],
+            dic["historico_saude"], 
+            dic["avaliacao"], 
+            dic["prescricao"]
+        )
+        atendimento.set_id_horario(dic.get("id_horario", 0))
+        atendimento.set_total(dic.get("total", 0.0))
+        atendimento.set_pago(dic.get("pago", False))
         return atendimento
