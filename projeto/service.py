@@ -111,8 +111,6 @@ class Service:
             Service.horario_inserir(data_datetime, False, None, None, id_profissional)
             inicial += inter
 
-
-
     @staticmethod
     def profissional_inserir(nome, email, especialidade, senha):
         obj = Profissional(0, nome, email, especialidade, senha)
@@ -142,7 +140,6 @@ class Service:
         h.sort(key = lambda obj : obj.get_data())
         return h
 
-
     @staticmethod
     def atendimento_inserir(data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario, total, pago):
         obj = Atendimento(0, data, queixa_principal, historico_saude, avaliacao, prescricao)
@@ -171,9 +168,8 @@ class Service:
 
     @staticmethod
     def atendimentoitem_inserir(id_atendimento, id_servico, qtd, valor):
-        obj = AtendimentoItens(0, qtd, valor)
-        obj.set_id_atendimento(id_atendimento)
-        obj.set_id_servico(id_servico)
+        # Corrigido para seguir a ordem correta dos parâmetros do AtendimentoItens: (id, id_atendimento, id_servico, qtd, valor)
+        obj = AtendimentoItens(0, id_atendimento, id_servico, qtd, valor)
         AtendimentoItensDAO().inserir(obj)
 
     @staticmethod
@@ -186,9 +182,7 @@ class Service:
 
     @staticmethod
     def atendimentoitem_atualizar(id, id_atendimento, id_servico, qtd, valor):
-        obj = AtendimentoItens(id, qtd, valor)
-        obj.set_id_atendimento(id_atendimento)
-        obj.set_id_servico(id_servico)
+        obj = AtendimentoItens(id, id_atendimento, id_servico, qtd, valor)
         AtendimentoItensDAO().atualizar(obj)
 
     @staticmethod
@@ -201,7 +195,7 @@ class Service:
         atendimentos = Service.atendimentoitem_listar()
         for obj in atendimentos:
             if obj.get_id_atendimento() == id_atendimento: h.append(obj)
-        h.sort(key = lambda obj : obj.get_data())
+        h.sort(key = lambda obj : obj.get_id())
         return h
 
     @staticmethod
