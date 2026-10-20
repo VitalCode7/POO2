@@ -8,6 +8,7 @@ class HorarioDAO:
         self.__abrir()
 
     def inserir(self, obj):
+        # gerar um novo id com o maior valor existente mais um
         id = 0
         if len(self.__objetos) > 0:
             for aux in self.__objetos:
@@ -53,3 +54,4 @@ class HorarioDAO:
         arquivo = open(self.__arquivo, mode = "w")
         json.dump(self.__objetos, arquivo, default = Horario.to_json, indent = 2)
         arquivo.close()
+        
