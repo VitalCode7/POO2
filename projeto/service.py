@@ -83,6 +83,14 @@ class Service:
     def horario_listar_id(id):
         return HorarioDAO().listar_id(id)
     @staticmethod
+    def horario_listar_profissional(id_profissional):
+        r = [
+            h for h in Service.horario_listar()
+            if h.get_id_profissional() == id_profissional
+        ]
+        r.sort(key = lambda h : h.get_data())
+        return r
+    @staticmethod
     def horario_atualizar(id, data, confirmado, id_cliente, id_servico, id_profissional):
         c = Horario(id, data)
         c.set_confirmado(confirmado)
@@ -109,6 +117,17 @@ class Service:
         for h in Service.horario_listar(): 
             if h.get_data() >= agora and h.get_id_profissional() == id_profissional and h.get_id_cliente() != None and h.get_confirmado() != True: 
                 r.append(h)
+        r.sort(key = lambda h : h.get_data())
+        return r
+    @staticmethod
+    def horario_listar_confirmados_hoje():
+        hoje = datetime.now().date()
+        r = [
+            h for h in Service.horario_listar()
+            if h.get_data().date() == hoje
+            and h.get_id_cliente() not in [0, None]
+            and h.get_confirmado()
+        ]
         r.sort(key = lambda h : h.get_data())
         return r
     @staticmethod

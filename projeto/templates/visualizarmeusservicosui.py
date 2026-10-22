@@ -17,7 +17,7 @@ class VisualizarMeusServicosUI:
     atendimentos = Service.atendimento_listar_cliente(
         st.session_state["usuario_id"]
     )
-    if not atendimentos:
+    if len(atendimentos) == 0:
       st.info("Você ainda não possui atendimentos registrados.")
       return
 
