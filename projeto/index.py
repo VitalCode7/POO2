@@ -38,15 +38,15 @@ class IndexUI:
         if op == "Registrar Atendimento": RegistrarAtendimentoUI.main()
 
     def menu_admin():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Clientes", "Serviços", "Horários", "Profissionais", "Atendimentos", "Horários confirmados hoje", "Agenda do profissional"])
+        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Clientes", "Serviços", "Horários", "Profissionais", "Atendimentos", "Horários Confirmados Hoje", "Agenda do Profissional"])
         if op == "Meus Dados": AdminUI.main()
         if op == "Clientes": ManterClienteUI.main()
         if op == "Serviços": ManterServicoUI.main()
         if op == "Horários": ManterHorarioUI.main()
         if op == "Profissionais": ManterProfissionalUI.main()
         if op == "Atendimentos": ManterAtendimentoUI.main()
-        if op == "Horários confirmados hoje": ListarHorariosConfirmadosHojeUI.main()
-        if op == "Agenda do profissional": ListarAgendaProfissionalUI.main()
+        if op == "Horários Confirmados Hoje": ListarHorariosConfirmadosHojeUI.main()
+        if op == "Agenda do Profissional": ListarAgendaProfissionalUI.main()
 
     def sair_do_sistema():
         if st.sidebar.button("Sair"):
