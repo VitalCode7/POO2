@@ -12,7 +12,10 @@ class AbrirAgendaUI:
         intervalo = st.text_input("Informe o intervalo entre os horários (min)", "30")
 
         if st.button("Abrir agenda"):
-            Service.abrir_agenda(data, horario_inicial, horario_final, intervalo, id_profissional=st.session_state["usuario_id"])
-            st.success("Agenda aberta com sucesso")
+            try:
+                Service.abrir_agenda(data, horario_inicial, horario_final, intervalo, id_profissional=st.session_state["usuario_id"])
+                st.success("Agenda aberta com sucesso")
+            except ValueError as erro:
+                st.error(erro)
             time.sleep(2)
             st.rerun()

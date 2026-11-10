@@ -1,29 +1,25 @@
-class AtendimentoItens:
-    def __init__(self, id, qtd, valor):
-        self.set_id(id)
-        self.set_qtd(qtd)
-        self.set_valor(valor)
-        self.set_id_atendimento(0)
-        self.set_id_servico(0)
+from models.atendimento import Atendimento
+from models.dao import dao
+import json
 
-    def get_id(self): return self.__id
-    def get_id_atendimento(self): return self.__id_atendimento
-    def get_id_servico(self): return self.__id_servico
-    def get_qtd(self): return self.__qtd
-    def get_valor(self): return self.__valor
+class AtendimentoDAO(dao):
+    def __init__(self):
+        super().__init__('atendimentos.json')
 
-    def set_id(self, id): self.__id = id
-    def set_id_atendimento(self, id_atendimento): self.__id_atendimento = id_atendimento
-    def set_id_servico(self, id_servico): self.__id_servico = id_servico
-    def set_qtd(self, qtd): self.__qtd = qtd
-    def set_valor(self, valor): self.__valor = valor
+    def _abrir(self):  
+        try:  
+            arquivo = open(self._arquivo, mode = 'r')
+            list_dic = json.load(arquivo)
+            arquivo.close()
+            self._objetos = []
+            for dic in list_dic:
+                obj = Atendimento.from_json(dic)
+                self._objetos.append(obj)
+        except FileNotFoundError:
+            pass
 
-    def to_json(self):
-        return {"id": self.__id, "id_atendimento": self.__id_atendimento, "id_servico": self.__id_servico, "qtd": self.__qtd, "valor": self.__valor}
-
-    @staticmethod
-    def from_json(dic):
-        item = AtendimentoItens(dic["id"], dic["qtd"], dic["valor"])
-        item.set_id_atendimento(dic["id_atendimento"])
-        item.set_id_servico(dic["id_servico"])
-        return item
+    def _salvar(self):    
+        arquivo = open(self._arquivo, mode = 'w')
+        json.dump(self._objetos, arquivo, default = Atendimento.to_json, indent = 2)
+        arquivo.close()
+        

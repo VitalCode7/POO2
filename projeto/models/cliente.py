@@ -7,19 +7,19 @@ class Cliente:
         self.set_senha(senha)
     
     def set_id(self, id):
-        if id < 0: raise ValueError("Id deve ser positivo")
+        if id < 0: raise ValueError('Id deve ser positivo')
         self.__id = id
     def set_nome(self, nome):
-        if nome == "": raise ValueError("Nome deve ser informado")
+        if nome == '': raise ValueError('Nome deve ser informado')
         self.__nome = nome
     def set_email(self, email):
-        if email == "": raise ValueError("E-mail deve ser informado")
+        if email == '': raise ValueError('E-mail deve ser informado')
         self.__email = email
     def set_fone(self, fone):
-        if fone == "": raise ValueError("Fone deve ser informado")
+        if fone == '': raise ValueError('Fone deve ser informado')
         self.__fone = fone
     def set_senha(self, senha):
-        if senha == "": raise ValueError("Senha deve ser informada")
+        if senha == '': raise ValueError('Senha deve ser informada')
         self.__senha = senha
 
     def get_id(self) : return self.__id
@@ -29,14 +29,14 @@ class Cliente:
     def get_senha(self) : return self.__senha
 
     def __str__(self):
-        return f"{self.__id} - {self.__nome} - {self.__email} - {self.__fone}"
+        return f'{self.__id} - {self.__nome} - {self.__email} - {self.__fone}'
     
     def to_dict(self):
-        return { "id":self.__id, "nome":self.__nome, "email":self.__email, "fone":self.__fone }
+        return { 'id':self.__id, 'nome':self.__nome, 'email':self.__email, 'fone':self.__fone }
 
     def to_json(self):
-        return { "id":self.__id, "nome":self.__nome, "email":self.__email, "fone":self.__fone, "senha":self.__senha }
+        return { 'id':self.__id, 'nome':self.__nome, 'email':self.__email, 'fone':self.__fone, 'senha':self.__senha }
     
     @staticmethod
     def from_json(dic):
-        return Cliente(dic["id"], dic["nome"], dic["email"], dic["fone"], dic["senha"])
+        return Cliente(dic['id'], dic['nome'], dic['email'], dic['fone'], dic['senha'])
