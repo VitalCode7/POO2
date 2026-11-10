@@ -1,8 +1,8 @@
 from models.atendimento import Atendimento
-from models.dao import DAO
+from models.dao import dao
 import json
 
-class AtendimentoDAO(DAO):
+class AtendimentoDAO(dao):
     def __init__(self):
         super().__init__("atendimentos.json")
 
