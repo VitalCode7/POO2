@@ -1,22 +1,30 @@
 from abc import ABC, abstractmethod
 
-class dao(ABC):
-    def __init__(self, arquivo):
+class DAO(ABC): 
+    def __init__(self, arquivo): 
         self._arquivo = arquivo
         self._objetos = []
         self._abrir()
+    
+    @abstractmethod
+    def _abrir(self):  
+        pass
+
+    @abstractmethod
+    def _salvar(self):
+        pass
 
     def inserir(self, obj):
+        # gerar um novo id com o maior valor existente mais um
         id = 0
         if len(self._objetos) > 0:
             for aux in self._objetos:
                 if aux.get_id() > id: id = aux.get_id()
         obj.set_id(id + 1)
-        self._objetos.append(obj)
-        self._salvar()
+        self.__objetos.append(obj)
+        self.__salvar()
 
-    def listar(self):                
-        return self._objetos
+    def listar(self): return self._objetos
 
     def listar_id(self, id):
         for obj in self._objetos:
@@ -35,9 +43,3 @@ class dao(ABC):
         if aux != None:
             self._objetos.remove(aux)
             self._salvar()
-
-    def _abrir(self):  
-        pass
-
-    def _salvar(self):    
-        pass

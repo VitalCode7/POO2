@@ -4,16 +4,18 @@ import time
 
 class AbrirContaUI:
     def main():
-        st.header('Abrir Conta no Sistema')
-        nome = st.text_input('Informe o nome')
-        email = st.text_input('Informe o e-mail')
-        fone = st.text_input('Informe o fone')
-        senha = st.text_input('Informe a senha', type='password')
-        if st.button('Inserir'):
-            try:
+        st.header("Abrir Conta no Sistema")
+        nome = st.text_input("Informe o nome")
+        email = st.text_input("Informe o e-mail")
+        fone = st.text_input("Informe o fone")
+        senha = st.text_input("Informe a senha", type="password") # Deixa daquele jeito lá de senha
+        if st.button("Inserir"):
+            try: 
                 Service.cliente_inserir(nome, email, fone, senha)
-                st.success('Conta criada com sucesso')
-            except ValueError as erro:
-                st.error(erro)
-            time.sleep(2)
-            st.rerun()
+                st.success("Conta criada com sucesso")
+                time.sleep(2)
+            except ValueError: 
+                st.error("Dados já existentes!")
+            finally: 
+                time.sleep(2)
+                st.rerun()

@@ -1,27 +1,24 @@
-import pandas as pd
 import streamlit as st
+import pandas as pd
 from service import Service
-
+import time
+from datetime import datetime
 
 class ListarHorariosConfirmadosHojeUI:
     def main():
-        st.header("Horários confirmados hoje")
-        horarios = Service.horario_listar_confirmados_hoje()
-        if len(horarios) == 0:
-            st.write("Nenhum horário confirmado para hoje")
-            return
-
-        dados = []
-        for horario in horarios:
-            cliente = Service.cliente_listar_id(horario.get_id_cliente())
-            servico = Service.servico_listar_id(horario.get_id_servico())
-            profissional = Service.profissional_listar_id(horario.get_id_profissional())
-            dados.append({
-                "id": horario.get_id(),
-                "data e hora": horario.get_data(),
-                "cliente": cliente.get_nome() if cliente is not None else "Não encontrado",
-                "serviço": servico.get_descricao() if servico is not None else "Não encontrado",
-                "profissional": profissional.get_nome() if profissional is not None else "Não encontrado",
-            })
-
-        st.dataframe(pd.DataFrame(dados))
+        st.header("Horários de Hoje")
+        horarios_hoje = Service.horarios_listar_confirmados_hoje()
+        if horarios_hoje == None: st.write("Nenhum horário disponível hoje")
+        else:
+            dic = []
+            for obj in horarios_hoje:
+                cliente = Service.cliente_listar_id(obj.get_id_cliente())
+                servico = Service.servico_listar_id(obj.get_id_servico())
+                profissional = Service.profissional_listar_id(obj.get_id_profissional())
+                if cliente != None: cliente = cliente.get_nome()
+                if servico != None: servico = servico.get_descricao()
+                if profissional != None: profissional = profissional.get_nome()
+                dic.append({"id" : obj.get_id(), "data" : obj.get_data(), "cliente" : cliente,
+                "serviço" : servico, "profissional" : profissional})
+            df = pd.DataFrame(dic)
+            st.dataframe(df)

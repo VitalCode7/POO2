@@ -1,14 +1,14 @@
 from models.atendimentoitens import AtendimentoItens
-from models.dao import dao
+from dao_json.dao import DAO
 import json
 
-class AtendimentoItensDAO(dao):
+class AtendimentoItensDAO(DAO):
     def __init__(self):
-        super().__init__('atendimentoitens.json')
+        super().__init__("atendimentoitens.json")
 
     def _abrir(self):  
         try:  
-            arquivo = open(self._arquivo, mode = 'r')
+            arquivo = open(self._arquivo, mode = "r")
             list_dic = json.load(arquivo)
             arquivo.close()
             self._objetos = []
@@ -19,7 +19,6 @@ class AtendimentoItensDAO(dao):
             pass
 
     def _salvar(self):    
-        arquivo = open(self._arquivo, mode = 'w')
+        arquivo = open(self._arquivo, mode = "w")
         json.dump(self._objetos, arquivo, default = AtendimentoItens.to_json, indent = 2)
         arquivo.close()
-        

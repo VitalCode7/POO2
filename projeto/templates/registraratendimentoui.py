@@ -1,43 +1,46 @@
 import streamlit as st
+import pandas as pd
 from service import Service
 import time
 from datetime import datetime
 
 class RegistrarAtendimentoUI:
     def main():
-        st.header("Registrar Atendimento")
-        horarios = Service.profissional_visualizar_agenda(st.session_state["usuario_id"])
+        st.header("Atendimentos")
+        tab1, tab2 = st.tabs(["Inserir", "Valores"]) # Abas
+        with tab1: RegistrarAtendimentoUI.inserir()
+        with tab2: RegistrarAtendimentoUI.valores()
+
+    def inserir():
+        data = st.text_input("Informe a Data", datetime.strftime(datetime.now(), "%d/%m/%Y"))
+        queixa_principal = st.text_input("Informe a queixa principal")
+        historico_saude = st.text_input("Informe o histórico de saúde")
+        avaliacao = st.text_input("Informe a avaliação")
+        prescricao = st.text_input("Informe a prescrição")
+        horarios = Service.horarios_atendimento(st.session_state["usuario_id"])
+
+        horario = st.selectbox("Selecione o horário", horarios)
+
+        pago = st.checkbox("Pago")
+        if st.button("Inserir"):
+            Service.atendimento_inserir(datetime.strptime(data, "%d/%m/%Y"), queixa_principal, historico_saude, avaliacao, prescricao, horario.get_id())
+            st.success("Atendimento atualizado com sucesso")
+            time.sleep(2)
+            st.rerun()
+    
+    def valores(): 
         atendimentos = Service.atendimento_listar()
-        horarios_filtrados = []
-        for h in horarios:
-            if h.get_confirmado() == True:
-                usado = False
-                for a in atendimentos:
-                    if a.get_id_horario() == h.get_id():
-                        usado = True
-                if usado == False:
-                    horarios_filtrados.append(h)
-        horarios = horarios_filtrados
-
-        if len(horarios) == 0:
-            st.write("Nenhum atendimento disponível")
-        else:
-            horario = st.selectbox("Informe o horário", horarios)
-            data = st.text_input("Informe a data e horário do atendimento", datetime.now().strftime("%d/%m/%Y %H:%M"))
-            queixa_principal = st.text_input("Informe a queixa principal")
-            historico_saude = st.text_input("Informe o histórico de saúde")
-            avaliacao = st.text_input("Informe a avaliação")
-            prescricao = st.text_input("Informe a prescrição")
-            servicos = Service.servico_listar()
-            servico = st.selectbox("Informe o serviço realizado", servicos)
-            qtd = st.number_input("Quantidade", min_value=1, step=1)
-
-            if st.button("Registrar"):
-                total = servico.get_valor() * qtd
-                Service.atendimento_inserir(
-                    datetime.strptime(data, "%d/%m/%Y %H:%M"), queixa_principal, historico_saude, avaliacao, prescricao, horario.get_id(), total, False)
-                atendimento = Service.atendimento_listar()[-1]
-                Service.atendimentoitem_inserir(atendimento.get_id(), servico.get_id(), qtd, servico.get_valor())
-                st.success("Atendimento registrado")
+        servicos = Service.servico_listar()
+        atendimento = st.selectbox("Selecione um atendimento", atendimentos)
+        servico = st.selectbox("Selecione um serviço", servicos)
+        qnt = st.number_input("Informe a quantidade", min_value = 1, step = 1)
+        valor = st.number_input("Valor", servico.get_valor() * qnt, disabled = True)
+        if st.button('Enviar'):
+            try: 
+                Service.atendimento_itens_inserir(atendimento.get_id(), servico.get_id(), qnt, valor)
+                st.success("Registro realizado com sucesso")
+            except ValueError: 
+                st.error("Não foi possível fazer as alterações!")
+            finally: 
                 time.sleep(2)
                 st.rerun()

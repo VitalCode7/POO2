@@ -1,31 +1,27 @@
-import pandas as pd
 import streamlit as st
+import pandas as pd
 from service import Service
-
+import time
+from datetime import datetime
 
 class ListarAgendaProfissionalUI:
     def main():
-        st.header("Agenda do profissional")
+        st.header("Agenda dos profissionais")
         profissionais = Service.profissional_listar()
-        if len(profissionais) == 0:
-            st.write("Nenhum profissional cadastrado")
-            return
-
-        profissional = st.selectbox("Selecione o profissional", profissionais)
-        horarios = Service.horario_listar_profissional(profissional.get_id())
-        if len(horarios) == 0:
-            st.write("Nenhum horário cadastrado na agenda deste profissional")
-            return
-
-        dados = []
-        for horario in horarios:
-            cliente = Service.cliente_listar_id(horario.get_id_cliente())
-            servico = Service.servico_listar_id(horario.get_id_servico())
-            dados.append({
-                "id": horario.get_id(),
-                "data e hora": horario.get_data(),
-                "cliente": cliente.get_nome() if cliente is not None else "não encontrado",
-                "serviço": servico.get_descricao() if servico is not None else "não encontrado",
-            })
-
-        st.dataframe(pd.DataFrame(dados))
+        if len(profissionais) == 0: st.write("Sem profissionais disponíveis")
+        else:
+            profissional = st.selectbox("Selecione o profissional", profissionais)
+            horarios = Service.agenda_profissionais(profissional.get_id())
+            if horarios == None: st.write("Sem horários disponíveis")
+            else: 
+                dic = []
+                for obj in horarios:
+                    cliente = Service.cliente_listar_id(obj.get_id_cliente())
+                    servico = Service.servico_listar_id(obj.get_id_servico())
+                    if cliente != None: cliente = cliente.get_nome()
+                    if servico != None: servico = servico.get_descricao()
+                    dic.append({"id" : obj.get_id(), "data" : obj.get_data(),
+                    "cliente" : cliente,
+                    "serviço" : servico})
+                df = pd.DataFrame(dic)
+                st.dataframe(df)
